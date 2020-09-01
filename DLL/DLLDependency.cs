@@ -1,5 +1,5 @@
 using DLL.DBContext;
-using DLL.DepartmentRepositories;
+using DLL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +16,7 @@ namespace DLL
             //repository dependencies
 
             services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
         }
     }
 }
