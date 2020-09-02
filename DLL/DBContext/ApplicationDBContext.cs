@@ -57,14 +57,27 @@ namespace DLL.DBContext
                 .Where(e => e.State != EntityState.Detached && e.State != EntityState.Unchanged);
             foreach (var entry in entries)
             {
-                switch (entry.State)
+                if (entry.Entity is ITrackable trackable)
                 {
-                    case EntityState.Deleted :
-                        entry.Property(IsDeleteProperty).CurrentValue = true;
-                        entry.State = EntityState.Modified;
-                        break;
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            trackable.CreatedAt = DateTimeOffset.Now;
+                            trackable.LastUpdatedAt = DateTimeOffset.Now;
+                            break;
+                        case EntityState.Modified:
+                            trackable.LastUpdatedAt = DateTimeOffset.Now;
+                            break;
+                        case EntityState.Deleted :
+                            entry.Property(IsDeleteProperty).CurrentValue = true;
+                            entry.State = EntityState.Modified;
+                            break;
+                    
+                    }
+                    
                     
                 }
+                
                 
             }
         }
